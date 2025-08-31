@@ -1,0 +1,106 @@
+<nav class="sidebar" [class.sidebar-collapsed]="sidebarCollapsed">
+  <div class="sidebar-header">
+    <a routerLink="/" class="sidebar-brand">MyApp</a>
+    <div class="sidebar-toggler" (click)="toggleSidebar()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="sidebar-body">
+    <ul class="sidebar-nav">
+      <ng-container *ngFor="let item of menuItems">
+        <!-- Category/Title -->
+        <li class="nav-item nav-category" *ngIf="item.isTitle">{{ item.label }}</li>
+
+        <!-- Menu Items -->
+        <li class="nav-item" *ngIf="!item.isTitle">
+          <!-- Parent with subItems -->
+          <a
+            class="nav-link"
+            *ngIf="hasItems(item)"
+            href="javascript:void(0)"
+            (click)="toggleMenu(item)"
+          >
+            <i [attr.data-feather]="item.icon" *ngIf="item.icon"></i>
+            <span>{{ item.label }}</span>
+            <i [attr.data-feather]="item.expanded ? 'chevron-up' : 'chevron-down'"></i>
+          </a>
+
+          <!-- Direct link -->
+          <a class="nav-link" *ngIf="!hasItems(item)" [routerLink]="item.link">
+            <i [attr.data-feather]="item.icon" *ngIf="item.icon"></i>
+            <span>{{ item.label }}</span>
+          </a>
+
+          <!-- Submenu -->
+          <ul class="sub-menu" *ngIf="hasItems(item)" [class.show]="item.expanded">
+            <ng-container *ngFor="let sub of item.subItems">
+              <li class="nav-item">
+                <!-- Sub item with no children -->
+                <a class="nav-link" *ngIf="!hasItems(sub)" [routerLink]="sub.link">
+                  <i [attr.data-feather]="sub.icon" *ngIf="sub.icon"></i>
+                  {{ sub.label }}
+                </a>
+
+                <!-- Sub item with children -->
+                <a
+                  class="nav-link"
+                  *ngIf="hasItems(sub)"
+                  href="javascript:void(0)"
+                  (click)="toggleMenu(sub)"
+                >
+                  <i [attr.data-feather]="sub.icon" *ngIf="sub.icon"></i>
+                  {{ sub.label }}
+                  <i [attr.data-feather]="sub.expanded ? 'chevron-up' : 'chevron-down'"></i>
+                </a>
+
+                <!-- Sub-submenu -->
+                <ul class="sub-menu" *ngIf="hasItems(sub)" [class.show]="sub.expanded">
+                  <li class="nav-item" *ngFor="let subSub of sub.subItems">
+                    <a class="nav-link" [routerLink]="subSub.link">
+                      <i [attr.data-feather]="subSub.icon" *ngIf="subSub.icon"></i>
+                      {{ subSub.label }}
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ng-container>
+          </ul>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</nav>
+
+<!-- Settings Sidebar -->
+<nav class="settings-sidebar" [class.open]="settingsSidebarOpen">
+  <div class="sidebar-body">
+    <a href="#" class="settings-sidebar-toggler" (click)="toggleSettingsSidebar()">
+      <i data-feather="settings"></i>
+    </a>
+    <h6>Sidebar Theme</h6>
+    <div>
+      <label>
+        <input
+          type="radio"
+          name="sidebarTheme"
+          value="sidebar-light"
+          checked
+          (change)="onSidebarThemeChange($event)"
+        />
+        Light
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="sidebarTheme"
+          value="sidebar-dark"
+          (change)="onSidebarThemeChange($event)"
+        />
+        Dark
+      </label>
+    </div>
+  </div>
+</nav>

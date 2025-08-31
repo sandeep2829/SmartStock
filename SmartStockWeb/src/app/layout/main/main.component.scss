@@ -1,0 +1,23 @@
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  transition: width 0.3s;
+}
+.sidebar.collapsed {
+  width: 70px;
+}
+.sidebar .nav-link span {
+  display: inline-block;
+  transition: opacity 0.3s;
+}
+.sidebar.collapsed .nav-link span {
+  display: none;
+}
+
+/* Main content expands when sidebar is collapsed */
+main {
+  transition: margin-left 0.3s;
+}
+main.expanded {
+  margin-left: 0;
+}
